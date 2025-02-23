@@ -157,27 +157,10 @@ def analyze_battery_data(data):
     plt.savefig(plot_path)
     plt.close()
 
-    # Predict lifetime
-    end_of_life_capacity = 70  # Battery end-of-life threshold
-    estimated_cycles = (end_of_life_capacity - model.intercept_) / model.coef_[0]
-    estimated_years = round(estimated_cycles / 365, 1)
-
-    # Recommendations
-    recommendations = [
-        "Avoid deep discharges and recharge before the battery drops below 20%.",
-        "Minimize exposure to high temperatures to slow degradation.",
-        "Use a proper charger to prevent overcharging.",
-        "Store the battery at a partial charge when unused for long periods."
-    ]
-
-    result = {
-        "current_capacity": capacity.iloc[-1],
-        "estimated_years": estimated_years,
-        "recommendations": recommendations
-    }
-    return result, plot_path
+    return {"message": "Analysis complete"}, plot_path
 
 
-# Main entry point to run the app
+# Main entry point for deployment on Render
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
