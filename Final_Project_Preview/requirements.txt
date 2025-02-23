@@ -1,1 +1,5 @@
-pip install flask pandas numpy matplotlib scikit-learn
+flask
+pandas
+numpy
+matplotlib
+scikit-learn
