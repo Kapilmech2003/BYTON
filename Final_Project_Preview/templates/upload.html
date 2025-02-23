@@ -2,17 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Upload Battery Data</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .upload-container {
+            max-width: 500px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-top: 50px;
+        }
+        .btn-upload {
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn-upload:hover {
+            background-color: #0056b3;
+        }
+        .btn-home {
+            display: block;
+            margin-top: 15px;
+        }
+    </style>
+    <script>
+        function redirectToAnalysis(event) {
+            event.preventDefault(); // Prevent actual form submission
+            let fileInput = document.getElementById("fileInput");
+
+            if (fileInput.files.length === 0) {
+                alert("Please select a file before uploading.");
+                return;
+            }
+
+            // Simulating file upload (without backend)
+            setTimeout(() => {
+                window.location.href = "./analysis.html"; // Redirect after "upload"
+            }, 1500); // Simulated delay
+        }
+    </script>
 </head>
 <body>
-    <div class="container mt-5">
-        <h2>Upload Battery Data (CSV or Excel)</h2>
-        <form action="/upload" method="POST" enctype="multipart/form-data">
-            <input type="file" name="file" class="form-control mt-3">
-            <button type="submit" class="btn btn-primary mt-3">Upload</button>
-        </form>
-        <a href="/" class="btn btn-link mt-3">Back to Home</a>
+
+    <div class="container d-flex justify-content-center">
+        <div class="upload-container">
+            <h2 class="mb-4">Upload Battery Data</h2>
+            <p class="text-muted">Accepted formats: CSV or Excel</p>
+
+            <form id="uploadForm" onsubmit="redirectToAnalysis(event)">
+                <input type="file" id="fileInput" name="file" class="form-control mb-3" required>
+                <button type="submit" class="btn-upload">Upload</button>
+            </form>
+
+            <a href="/" class="btn btn-link btn-home">Back to Home</a>
+        </div>
     </div>
+
 </body>
 </html>

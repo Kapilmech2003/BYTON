@@ -9,6 +9,7 @@
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
             color: #333;
+            text-align: center;
         }
         .chat-container {
             width: 70%;
@@ -26,6 +27,7 @@
             overflow-y: scroll;
             background-color: #f9f9f9;
             border-radius: 8px;
+            text-align: left;
         }
         .message {
             margin-bottom: 15px;
@@ -36,9 +38,10 @@
         }
         .bot {
             color: #28a745;
+            font-weight: bold;
         }
         input[type="text"] {
-            width: 80%;
+            width: 70%;
             padding: 10px;
             font-size: 16px;
             border-radius: 5px;
@@ -52,31 +55,56 @@
             background-color: #28a745;
             color: white;
             border: none;
+            cursor: pointer;
         }
         button:hover {
             background-color: #218838;
-        }
-        .response {
-            color: #333;
-            font-size: 16px;
-            line-height: 1.6;
         }
     </style>
 </head>
 <body>
 
 <div class="chat-container">
-    <h2 style="text-align:center;">Chatbot Support</h2>
-    <div class="chat-box" id="chat-box">
-        {% if response %}
-        <div class="response bot">{{ response }}</div>
-        {% endif %}
-    </div>
-    <form method="POST">
-        <input type="text" id="user-input" name="user_message" placeholder="Type your question here..." required>
-        <button type="submit">Send</button>
-    </form>
+    <h2>Chatbot Support</h2>
+    <div class="chat-box" id="chat-box"></div>
+    <input type="text" id="user-input" placeholder="Type your question here..." required>
+    <button onclick="sendMessage()">Send</button>
 </div>
+
+<script>
+    function sendMessage() {
+        let userInput = document.getElementById("user-input").value.trim();
+        let chatBox = document.getElementById("chat-box");
+
+        if (userInput === "") return;
+
+        // Append user message
+        chatBox.innerHTML += `<div class="message user">You: ${userInput}</div>`;
+
+        // Bot responses based on input
+        let botResponse = getBotResponse(userInput.toLowerCase());
+
+        // Append bot response
+        chatBox.innerHTML += `<div class="message bot">Bot: ${botResponse}</div>`;
+
+        // Scroll to latest message
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Clear input field
+        document.getElementById("user-input").value = "";
+    }
+
+    function getBotResponse(input) {
+        let responses = {
+            "hi": "Hello! How can I assist you?",
+            "hello": "Hi there! What do you need help with?",
+            "bike details": "We provide information on bike models, pricing, and maintenance. What do you need?",
+            "how are you": "I'm just a bot, but I'm always ready to help!",
+        };
+
+        return responses[input] || "Sorry, this information is not available at the moment. Our server was busy right now please reach after some hours";
+    }
+</script>
 
 </body>
 </html>
