@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
             color: #333;
             text-align: center;
         }
+
         .chat-container {
             width: 70%;
             max-width: 800px;
@@ -20,6 +22,7 @@
             border-radius: 8px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
+
         .chat-box {
             border: 1px solid #ccc;
             padding: 20px;
@@ -29,17 +32,21 @@
             border-radius: 8px;
             text-align: left;
         }
+
         .message {
             margin-bottom: 15px;
         }
+
         .user {
             color: #0e76a8;
             font-weight: bold;
         }
+
         .bot {
             color: #28a745;
             font-weight: bold;
         }
+
         input[type="text"] {
             width: 70%;
             padding: 10px;
@@ -48,6 +55,7 @@
             border: 1px solid #ccc;
             margin-right: 10px;
         }
+
         button {
             padding: 10px;
             font-size: 16px;
@@ -57,54 +65,57 @@
             border: none;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #218838;
         }
     </style>
+    <script>
+        async function sendMessage() {
+            let userInput = document.getElementById("user-input").value.trim();
+            let chatBox = document.getElementById("chat-box");
+
+            if (userInput === "") return;
+
+            chatBox.innerHTML += `<div class="message user">You: ${userInput}</div>`;
+
+            let botResponse = await getBotResponse(userInput);
+
+            chatBox.innerHTML += `<div class="message bot">Bot: ${botResponse}</div>`;
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+            document.getElementById("user-input").value = "";
+        }
+
+        async function getBotResponse(userInput) {
+            try {
+                let response = await fetch("http://127.0.0.1:5000/chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ question: userInput })
+                });
+
+                let data = await response.json();
+                return data.answer || "Sorry, I'm unable to process your request right now.";
+            } catch (error) {
+                return "Error connecting to the chatbot API.";
+            }
+        }
+    </script>
+
 </head>
+
 <body>
 
-<div class="chat-container">
-    <h2>Chatbot Support</h2>
-    <div class="chat-box" id="chat-box"></div>
-    <input type="text" id="user-input" placeholder="Type your question here..." required>
-    <button onclick="sendMessage()">Send</button>
-</div>
-
-<script>
-    function sendMessage() {
-        let userInput = document.getElementById("user-input").value.trim();
-        let chatBox = document.getElementById("chat-box");
-
-        if (userInput === "") return;
-
-        // Append user message
-        chatBox.innerHTML += `<div class="message user">You: ${userInput}</div>`;
-
-        // Bot responses based on input
-        let botResponse = getBotResponse(userInput.toLowerCase());
-
-        // Append bot response
-        chatBox.innerHTML += `<div class="message bot">Bot: ${botResponse}</div>`;
-
-        // Scroll to latest message
-        chatBox.scrollTop = chatBox.scrollHeight;
-
-        // Clear input field
-        document.getElementById("user-input").value = "";
-    }
-
-    function getBotResponse(input) {
-        let responses = {
-            "hi": "Hello! How can I assist you?",
-            "hello": "Hi there! What do you need help with?",
-            "bike details": "We provide information on bike models, pricing, and maintenance. What do you need?",
-            "how are you": "I'm just a bot, but I'm always ready to help!",
-        };
-
-        return responses[input] || "Sorry, this information is not available at the moment. Our server was busy right now please reach after some hours";
-    }
-</script>
+    <div class="chat-container">
+        <h2>Chatbot Support</h2>
+        <div class="chat-box" id="chat-box"></div>
+        <input type="text" id="user-input" placeholder="Type your question here..." required>
+        <button onclick="sendMessage()">Send</button>
+    </div>
 
 </body>
+
 </html>
