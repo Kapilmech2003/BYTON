@@ -1,1 +1,2 @@
-gunicorn -w 4 -b 0.0.0.0:$PORT Final_Project_Preview.chatbot_api:app
+#!/bin/bash
+gunicorn -w 4 -b 0.0.0.0:$PORT chatbot_api:app
