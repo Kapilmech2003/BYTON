@@ -1,5 +1,4 @@
 flask
-pandas
-numpy
-matplotlib
-scikit-learn
+flask-cors
+requests
+gunicorn
