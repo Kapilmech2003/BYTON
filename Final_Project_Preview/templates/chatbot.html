@@ -77,13 +77,22 @@
 
             if (userInput === "") return;
 
+            // Append user message
             chatBox.innerHTML += `<div class="message user">You: ${userInput}</div>`;
 
+            // Fetch response from the chatbot API
             let botResponse = await getBotResponse(userInput);
 
-            chatBox.innerHTML += `<div class="message bot">Bot: ${botResponse}</div>`;
+            // Format bot response with line breaks
+            let formattedResponse = formatBotResponse(botResponse);
 
+            // Append bot response
+            chatBox.innerHTML += `<div class="message bot">Bot:<br>${formattedResponse}</div>`;
+
+            // Scroll to latest message
             chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Clear input field
             document.getElementById("user-input").value = "";
         }
 
@@ -103,6 +112,20 @@
                 return "Error connecting to the chatbot API.";
             }
         }
+
+        function formatBotResponse(response) {
+            // Ensure response is a string and split by newline
+            let lines = response.split("\n").map(line => line.trim()).filter(line => line !== "");
+
+            // Format response into HTML bullet points if multiple lines exist
+            if (lines.length > 1) {
+                return "<ul>" + lines.map(line => `<li>${line}</li>`).join("") + "</ul>";
+            }
+
+            // Otherwise, return plain text with line breaks
+            return response.replace(/\n/g, "<br>");
+        }
+
     </script>
 
 </head>
@@ -110,7 +133,7 @@
 <body>
 
     <div class="chat-container">
-        <h2>GenAI Chatbot Support </h2>
+        <h2>GenAI Chatbot Support</h2>
         <div class="chat-box" id="chat-box"></div>
         <input type="text" id="user-input" placeholder="Type your question here..." required>
         <button onclick="sendMessage()">Send</button>
